@@ -1,0 +1,5 @@
+outs:
+- md5: f9b97efa0ff42dfc44307de38780188e
+  size: 2907350
+  hash: md5
+  path: diamonds_fe.csv
