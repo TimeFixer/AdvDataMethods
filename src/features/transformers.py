@@ -5,11 +5,6 @@ from sklearn.ensemble import IsolationForest
 
 
 class CutOrdinalEncoder(BaseEstimator, TransformerMixin):
-    """Кастомный трансформер для Варианта 9:
-
-    преобразует признак 'cut' в порядковый числовой код.
-    """
-
     CUT_MAPPING = {
         'Fair': 0,
         'Good': 1,
@@ -41,14 +36,12 @@ class DiamondFeatureGenerator(BaseEstimator, TransformerMixin):
         pass
 
     def fit(self, X, y=None):
+        self.fitted_ = True
         return self
 
     def transform(self, X):
-        # На вход поступает numpy-массив после ColumnTransformer
         X_arr = np.asarray(X, dtype=float)
         
-        # Порядок колонок после препроцессора:
-        # [carat, depth, table, x, y, z, cut, (плюс one-hot колонки цвета и чистоты)]
         carat = X_arr[:, 0:1]
         depth = X_arr[:, 1:2]
         table = X_arr[:, 2:3]
@@ -56,9 +49,9 @@ class DiamondFeatureGenerator(BaseEstimator, TransformerMixin):
         y = X_arr[:, 4:5]
         z = X_arr[:, 5:6]
 
-        volume = x * y * z                          # Приблизительный объем бриллианта
-        carat_sq = carat ** 2                       # Нелинейный вес
-        depth_table_ratio = depth / (np.abs(table) + 1e-5) # Отношение глубины к площадке
+        volume = x * y * z                          
+        carat_sq = carat ** 2                       
+        depth_table_ratio = depth / (np.abs(table) + 1e-5) 
 
         return np.hstack([X_arr, volume, carat_sq, depth_table_ratio])
 
